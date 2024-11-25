@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Core.Exstensions
@@ -20,9 +21,10 @@ namespace Core.Exstensions
             claims.Add(new Claim(ClaimTypes.NameIdentifier, nameIdentifier));
         }
 
-        public static void AddRoles(this ICollection<Claim> claims, string[] roles)
+        public static void AddRoles(this ICollection<Claim> claims, string role)
         {
-            roles.ToList().ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role)));
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
+
     }
 }

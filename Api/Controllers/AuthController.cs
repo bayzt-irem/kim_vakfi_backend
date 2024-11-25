@@ -18,7 +18,6 @@ namespace Api.Controllers
         /// <summary>
         /// login
         /// </summary>
-        /// <param name="viewDto"></param>
         /// <returns></returns>
         [HttpGet, Route("current")]
         public async Task<IActionResult> GetCurrentUserAsync()

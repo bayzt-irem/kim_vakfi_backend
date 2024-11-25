@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Items", "Entities\Items.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{0E2B69EF-4FB8-4667-9CDD-684C5C2A84BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{6D8FD1C4-DE8A-43CD-B73E-4C4D8C25407E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{6D8FD1C4-DE8A-43CD-B73E-4C4D8C25407E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

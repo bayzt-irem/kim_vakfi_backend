@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Items.Enums;
 
 namespace Items.Entities
 {
@@ -13,5 +9,6 @@ namespace Items.Entities
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public UserType UserType { get; set; }
     }
 }

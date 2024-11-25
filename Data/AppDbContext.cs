@@ -12,8 +12,10 @@ namespace Data.Infrastructure
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; } 
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }  
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var addedEntries = ChangeTracker.Entries()

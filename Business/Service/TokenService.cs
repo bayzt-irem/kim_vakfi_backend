@@ -60,6 +60,7 @@ namespace Business.Service
             claims.AddNameIdentifier(user.Id.ToString());
             claims.AddEmail(user.Email);
             claims.AddName($"{user.Name + ' ' + user.Surname}");
+            claims.AddRoles(user.UserType.ToString()); 
             return claims;
         }
 

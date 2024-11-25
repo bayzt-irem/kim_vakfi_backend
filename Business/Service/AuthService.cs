@@ -3,7 +3,7 @@ using Core.Security.Hasing;
 using Core.Security.JWT;
 using Data.Infrastructure;
 using Items.Command.User;
-using Items.Dto;
+using Items.Dto.User;
 using Items.Entities;
 using Items.Types;
 using Microsoft.EntityFrameworkCore;
