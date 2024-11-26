@@ -1,7 +1,5 @@
 ﻿using Items.Command.Cart;
-using Items.Command.User;
 using Items.Dto.Cart;
-using Items.Dto.User;
 
 namespace Business.IService
 {
@@ -10,5 +8,6 @@ namespace Business.IService
         Task<List<CartInfoDto>> GetAllCartsAsync();
         Task<Guid> CreateCartAsync(CreateCartCommand command);
         Task<Guid> UpdateCartAsync(UpdateCartCommand command);
+        Task<bool> DeleteCartAsync(Guid cartId);
     }
 }

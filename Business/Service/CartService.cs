@@ -2,7 +2,6 @@
 using Data.Infrastructure;
 using Items.Command.Cart;
 using Items.Dto.Cart;
-using Items.Dto.User;
 using Items.Entities;
 using Items.Types;
 using Microsoft.EntityFrameworkCore;
@@ -22,15 +21,15 @@ namespace Business.Service
 
         public async Task<List<CartInfoDto>> GetAllCartsAsync()
         {
-            return await _context.Carts.Include(x => x.CreateByUser).Include(x => x.UpdateByUser).Select(x => new CartInfoDto
+            return await _context.Carts.Include(x => x.CreatedBy).Include(x => x.ModifiedBy).Select(x => new CartInfoDto
             {
                 Id = x.Id,  
                 Title = x.Title ,
                 Description = x.Description , 
-                PositionYaw = x.PositionYaw ,
-                PositionPitch = x.PositionPitch ,
-                CreateByUserName = x.CreateByUser.Name,
-                UpdateByUserName = x.UpdateByUser.Name,
+                Yaw = x.Yaw ,
+                Pitch = x.Pitch ,
+                CreateByUserName = x.CreatedBy.Name,
+                UpdateByUserName = x.ModifiedBy.Name,
                 CreatedAt = x.CreatedAt ,
                 ModifiedAt = x.ModifiedAt
             }).ToListAsync();
@@ -38,14 +37,21 @@ namespace Business.Service
 
         public async Task<Guid> CreateCartAsync(CreateCartCommand command)
         {
+            var place = await _context.Places.FirstOrDefaultAsync(x => x.Id == command.PlaceId);
+            if (place == null)
+            {
+                throw new Exception("Place is not found!");
+            }
+
             var cart = new Cart
             {
+                PlaceId = command.PlaceId,
                 Title = command.Title,
                 Description = command.Description,
-                PositionYaw = command.PositionYaw,
-                PositionPitch = command.PositionPitch,
-                CreateByUserId = _contextAccessor.UserId,
+                Yaw = command.Yaw,
+                Pitch = command.Pitch,
             };
+
             await _context.Carts.AddAsync(cart);
             await _context.SaveChangesAsync();
             return cart.Id;
@@ -60,11 +66,29 @@ namespace Business.Service
             }
             cart.Title = command.Title;
             cart.Description = command.Description;
-            cart.PositionYaw = command.PositionYaw;
-            cart.PositionPitch = command.PositionPitch;
-            cart.UpdateByUserId = _contextAccessor.UserId;
+            cart.Yaw = command.PositionYaw;
+            cart.Pitch = command.PositionPitch; 
             await _context.SaveChangesAsync();
             return cart.Id;
+        }
+      
+        public async Task<bool> DeleteCartAsync(Guid cartId)
+        {
+            try
+            {
+                var cart = await _context.Carts.FirstOrDefaultAsync(x => x.Id == cartId);
+                if (cart == null)
+                {
+                    throw new ArgumentException("Cart is not found!");
+                }
+                _context.Carts.Remove(cart);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

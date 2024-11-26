@@ -4,6 +4,7 @@ using Data.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241126101850_auditable")]
+    partial class auditable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,10 +31,13 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CreateByUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedById")
+                    b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -41,29 +47,27 @@ namespace Data.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ModifiedById")
+                    b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Pitch")
+                    b.Property<decimal>("PositionPitch")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<decimal>("PositionYaw")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Yaw")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<Guid>("UpdateByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
+                    b.HasIndex("CreateByUserId");
 
-                    b.HasIndex("ModifiedById");
-
-                    b.HasIndex("PlaceId");
+                    b.HasIndex("UpdateByUserId");
 
                     b.ToTable("Carts");
                 });
@@ -89,53 +93,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OperationClaims");
-                });
-
-            modelBuilder.Entity("Items.Entities.Place", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("District")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.ToTable("Places");
                 });
 
             modelBuilder.Entity("Items.Entities.User", b =>
@@ -205,51 +162,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Items.Entities.Cart", b =>
                 {
-                    b.HasOne("Items.Entities.User", "CreatedBy")
+                    b.HasOne("Items.Entities.User", "CreateByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
+                        .HasForeignKey("CreateByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Items.Entities.User", "ModifiedBy")
+                    b.HasOne("Items.Entities.User", "UpdateByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedById")
+                        .HasForeignKey("UpdateByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Items.Entities.Place", null)
-                        .WithMany("Carts")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("CreateByUser");
 
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("Items.Entities.Place", b =>
-                {
-                    b.HasOne("Items.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Items.Entities.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
-                });
-
-            modelBuilder.Entity("Items.Entities.Place", b =>
-                {
-                    b.Navigation("Carts");
+                    b.Navigation("UpdateByUser");
                 });
 #pragma warning restore 612, 618
         }

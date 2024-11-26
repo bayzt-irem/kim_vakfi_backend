@@ -93,6 +93,7 @@ namespace Business.Service
                 Surname = command.Surname,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
+                UserType = Items.Enums.UserType.Admin,
             };
 
             await _context.Users.AddAsync(newUser);
